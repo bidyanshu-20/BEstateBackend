@@ -18,10 +18,16 @@ mongoose
 
 const app = express();
 
-app.use(cors({
-  origin: "https://b-estate-frontend.vercel.app",  // ⬅️ CHANGE THIS
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "https://b-estate-frontend.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.set("trust proxy", 1);
 
 
 // console.log("✅ Loaded JWT_SECRET:", process.env.JWT_SECRET);
