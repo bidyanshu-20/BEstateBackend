@@ -5,57 +5,54 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import authrouter from "./routes/auth.routes.js";
 import listingRouter from "./routes/listing.route.js";
-import cors from "cors";
-
+import cors from "cors";   
 dotenv.config();
 
-// Connect to Mongo
+// console.log("-----------------");
+
+// console.log("Loaded MONGO_URL:", process.env.MONGO_URL);
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {})
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => console.error(" MongoDB connection error:", err));
 
 const app = express();
 
-// CORS FIX (MOST IMPORTANT)
 app.use(
   cors({
     origin: "https://b-estate-frontend.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Trust proxy for Vercel
 app.set("trust proxy", 1);
 
-// Middleware
+
+// console.log("✅ Loaded JWT_SECRET:", process.env.JWT_SECRET);
+
 app.use(express.json());
+
 app.use(cookieParser());
 
-// Test route
+
 app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-// Routes
 app.use("/api/auth", authrouter);
 app.use("/api/user", userRouter);
 app.use("/api/listing", listingRouter);
-
-// Error Handler
+// middleware for handling error
 app.use((err, req, resp, next) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
+  const message = err.message || "Internal server Issue..";
   return resp.status(statusCode).json({
     success: false,
     statusCode,
     message,
   });
 });
-
-// PORT FIX
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT);
