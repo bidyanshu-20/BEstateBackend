@@ -49,6 +49,7 @@ export const signin = async (req, res, next) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        path: "/", // <--- IMPORTANT ON VERCEL
       })
       .status(200)
       .json(rest);
@@ -65,7 +66,12 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",
+        })
         .status(200)
         .json(rest);
     } else {
@@ -90,6 +96,7 @@ export const google = async (req, res, next) => {
           httpOnly: true,
           secure: true, // 🔥 CHANGED
           sameSite: "none",
+          path: "/", // <--- IMPORTANT ON VERCEL
         })
         .status(200)
         .json(rest);
@@ -104,6 +111,7 @@ export const signOut = async (req, res, next) => {
     res.clearCookie("access_token", {
       secure: true, // 🔥 CHANGED
       sameSite: "none", // 🔥 CHANGED
+      path: "/", // <--- IMPORTANT ON VERCEL
     });
     res.status(200).json("User has been Logged Out!");
   } catch (error) {
