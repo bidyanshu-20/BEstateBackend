@@ -22,6 +22,8 @@ app.use(
   cors({
     origin: "https://b-estate-frontend.vercel.app",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
