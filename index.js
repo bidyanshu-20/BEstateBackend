@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import authrouter from "./routes/auth.routes.js";
 import listingRouter from "./routes/listing.route.js";
+import cors from "cors";   
 dotenv.config();
 
 // console.log("-----------------");
@@ -16,6 +17,12 @@ mongoose
   .catch((err) => console.error(" MongoDB connection error:", err));
 
 const app = express();
+
+app.use(cors({
+  origin: "https://b-estate-frontend.vercel.app",  // ⬅️ CHANGE THIS
+  credentials: true
+}));
+
 
 // console.log("✅ Loaded JWT_SECRET:", process.env.JWT_SECRET);
 
